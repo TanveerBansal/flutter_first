@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:first_app/models/expense.dart';
-import 'package:first_app/widgets/expensesLists/expense_items.dart';
+import 'package:first_app/_expense_tracker_app/models/expense.dart';
+import 'package:first_app/_expense_tracker_app/widgets/expensesLists/expense_items.dart';
 
 class ExpensesList extends StatelessWidget {
   const ExpensesList({
