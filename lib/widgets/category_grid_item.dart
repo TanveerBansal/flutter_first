@@ -2,14 +2,20 @@ import 'package:first_app/models/category.dart';
 import 'package:flutter/material.dart';
 
 class CategoryGridItem extends StatelessWidget {
-  const CategoryGridItem({super.key, required this.category});
+  const CategoryGridItem({
+    super.key,
+    required this.category,
+    required this.onSelect,
+  });
 
   final Category category;
+  final void Function() onSelect;
+  
   @override
   Widget build(BuildContext context) {
     // NOTE: here inkwell widget is used to make the child Clickable
     return InkWell(
-      onTap: () {},
+      onTap: onSelect,
       splashColor: Theme.of(context).primaryColor,
       borderRadius: BorderRadius.circular(16),
       child: Container(

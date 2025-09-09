@@ -1,9 +1,29 @@
+import 'package:first_app/models/category.dart';
+import 'package:first_app/screens/meals.dart';
 import 'package:first_app/widgets/category_grid_item.dart';
 import 'package:flutter/material.dart';
 import 'package:first_app/data/dummay_data.dart';
 
 class CategoryScreen extends StatelessWidget {
   const CategoryScreen({super.key});
+
+  void _selectCategory(BuildContext context, Category category) {
+    final meals = dummyMeals
+        .where((meal) => meal.categories.contains(category.id))
+        .toList();
+
+    // Here we implement navigation to Meals Screen
+    // NOTE: Navigator put the screen to top most layer of the stack
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (ctx) => MealsScreen(title: category.title, meals: meals),
+      ),
+    );
+    // this can be written another as show below, (both will work same)
+    // Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>MealsScreen(title: "Meals Test", meals: [])));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +39,13 @@ class CategoryScreen extends StatelessWidget {
         ),
         children: [
           for (final category in availableCategories)
-            CategoryGridItem(category: category, key: ValueKey(category.id),),
+            CategoryGridItem(
+              category: category,
+              key: ValueKey(category.id),
+              onSelect: () {
+                _selectCategory(context, category);
+              },
+            ),
         ],
       ),
     );
