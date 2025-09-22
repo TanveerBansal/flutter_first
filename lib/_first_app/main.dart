@@ -1,3 +1,4 @@
+// ignore_for_file: missing_provider_scope
 import 'package:flutter/material.dart'; //to import a package you must specify package:<thenItsName>
 import 'package:first_app/_first_app/gradient_container.dart';
 

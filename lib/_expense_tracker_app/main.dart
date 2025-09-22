@@ -1,3 +1,4 @@
+// ignore_for_file: missing_provider_scope
 import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
 import 'package:first_app/_expense_tracker_app/widgets/expenses.dart';
