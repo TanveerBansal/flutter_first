@@ -6,11 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:first_app/data/dummay_data.dart';
 
 class CategoryScreen extends StatelessWidget {
-  const CategoryScreen({super.key, required this.onToggleFavourite});
+  const CategoryScreen({
+    super.key,
+    required this.onToggleFavourite,
+    required this.availableMeals,
+  });
   final void Function(Meal meal) onToggleFavourite;
+  final List<Meal> availableMeals;
 
   void _selectCategory(BuildContext context, Category category) {
-    final meals = dummyMeals
+    final meals = availableMeals
         .where((meal) => meal.categories.contains(category.id))
         .toList();
 

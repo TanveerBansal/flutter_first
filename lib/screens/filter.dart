@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 enum Filter { glutenFree, lactoseFree, vegetarian, vegan }
 
 class FilterScreen extends StatefulWidget {
-  const FilterScreen({super.key});
+  const FilterScreen({super.key, required this.currentFilters});
+  final Map<Filter, bool> currentFilters;
   @override
   State<FilterScreen> createState() {
     return _FilterScreenState();
@@ -16,6 +17,15 @@ class _FilterScreenState extends State<FilterScreen> {
   var _isLactoseFree = false;
   var _isVegetarian = false;
   var _isVegan = false;
+
+  @override 
+  void initState(){
+    super.initState();
+    _isGlutenFree = widget.currentFilters[Filter.glutenFree]!;
+    _isLactoseFree = widget.currentFilters[Filter.lactoseFree]!;
+    _isVegetarian = widget.currentFilters[Filter.vegetarian]!;
+    _isVegan = widget.currentFilters[Filter.vegan]!;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +44,10 @@ class _FilterScreenState extends State<FilterScreen> {
       // ),
       body: PopScope(
         canPop: false,
-        onPopInvokedWithResult: (didPop, context) {
+        onPopInvokedWithResult: (didPop, c) {
           // pending-----
           if (didPop) return;
-          Navigator.of(context as BuildContext).pop({
+          Navigator.of(context).pop({
             Filter.glutenFree: _isGlutenFree,
             Filter.lactoseFree: _isLactoseFree,
             Filter.vegetarian: _isVegetarian,
