@@ -1,5 +1,5 @@
 import 'package:first_app/models/meal.dart';
-import 'package:first_app/widgets/meal_item.dart';
+import 'package:first_app/widgets/meal_item_v1.dart';
 import 'package:flutter/material.dart';
 
 class MealsScreen extends StatelessWidget {
@@ -7,9 +7,11 @@ class MealsScreen extends StatelessWidget {
     super.key,
     this.title,
     required this.meals,
+    required this.onToggleFavourite,
   });
   final String? title;
   final List<Meal> meals;
+  final void Function(Meal meal) onToggleFavourite;
   @override
   Widget build(BuildContext context) {
     Widget content = Center(
@@ -36,7 +38,7 @@ class MealsScreen extends StatelessWidget {
       content = ListView.builder(
         itemCount: meals.length,
         itemBuilder: (ctx, index) =>
-            MealItem(meals[index]),
+            MealItem(meals[index], onToggleFavourite: onToggleFavourite),
       );
     }
 

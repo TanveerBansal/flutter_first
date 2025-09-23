@@ -1,3 +1,4 @@
+import 'package:first_app/data/dummay_data.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
@@ -6,4 +7,4 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // -Read or watch other providers
 // -Manage state
 // -Access context-aware logic (like lifecycle, disposal, etc.)
-final mealsProvider = Provider((ref){});
+final mealsProvider = Provider((ref){return dummyMeals;});

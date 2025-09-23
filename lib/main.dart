@@ -1,6 +1,8 @@
-import 'package:first_app/screens/tabs.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'package:first_app/screens/tabs.dart';
 // import 'package:first_app/screens/categories.dart';
 
 final theme = ThemeData(
@@ -20,5 +22,6 @@ class MyApp extends StatelessWidget {
 }
 
 void main() {
-  runApp(const MyApp());
+  // NOTE: ProviderScope is root container that keep track of all global state, without it our provide have nowhere to live
+  runApp(const ProviderScope(child: MyApp()));
 }

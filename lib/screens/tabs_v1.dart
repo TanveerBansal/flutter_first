@@ -1,14 +1,10 @@
-import 'package:first_app/providers/favorites_provider.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'package:first_app/providers/meals_provider.dart';
-// import 'package:first_app/data/dummay_data.dart';
-// import 'package:first_app/models/meal.dart';
-import 'package:first_app/screens/categories.dart';
+import 'package:first_app/data/dummay_data.dart';
+import 'package:first_app/models/meal.dart';
+import 'package:first_app/screens/categories_v1.dart';
 import 'package:first_app/screens/filter.dart';
-import 'package:first_app/screens/meals.dart';
+import 'package:first_app/screens/meals_v1.dart';
 import 'package:first_app/widgets/main_drawer.dart';
+import 'package:flutter/material.dart';
 
 const initialFilters = {
   Filter.glutenFree: false,
@@ -17,25 +13,44 @@ const initialFilters = {
   Filter.vegan: false,
 };
 
-// NOTE: While using the riverpod provider in class, we replace the StatefullWidget with ConsumerStatefulWidget and the StatelessWidget with the ConsumerWidget
-class TabsScreen extends ConsumerStatefulWidget {
+class TabsScreen extends StatefulWidget {
   const TabsScreen({super.key});
   @override
-  //NOTE: State changes to ConsumerState while using riverpod
-  // State<TabsScreen> createState() {
-  ConsumerState<TabsScreen> createState() {
+  State<TabsScreen> createState() {
     return _TabScreenState();
   }
 }
 
-class _TabScreenState extends ConsumerState<TabsScreen> {
+class _TabScreenState extends State<TabsScreen> {
   int _selectedPageIndex = 0;
-
+  final List<Meal> _favoriteMeals = [];
   Map<Filter, bool> _selectedFilters = initialFilters;
   void _selectPage(int index) {
     setState(() {
       _selectedPageIndex = index;
     });
+  }
+
+  void _showInfoMessage(String message) {
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  void _toggleMealFavorite(Meal meal) {
+    final isExisting = _favoriteMeals.contains(meal);
+    if (isExisting) {
+      setState(() {
+        _favoriteMeals.remove(meal);
+        _showInfoMessage('No longer favorite meal');
+      });
+    } else {
+      setState(() {
+        _favoriteMeals.add(meal);
+        _showInfoMessage('Marked as favourite meals');
+      });
+    }
   }
 
   void _setScreen(String identifier) async {
@@ -44,9 +59,7 @@ class _TabScreenState extends ConsumerState<TabsScreen> {
       // final result = await Navigator.pushReplacement(
       final result = await Navigator.push<Map<Filter, bool>>(
         context,
-        MaterialPageRoute(
-          builder: (ctx) => FilterScreen(currentFilters: _selectedFilters),
-        ),
+        MaterialPageRoute(builder: (ctx) => FilterScreen(currentFilters: _selectedFilters,)),
       );
 
       setState(() {
@@ -57,10 +70,7 @@ class _TabScreenState extends ConsumerState<TabsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // NOTE: here ref is provided by the riverpod, and watch() method accepts an argument which you make, and watch is reponsible to re-execute the build method when ever the data is changed;
-    final meals = ref.watch(mealsProvider);
-
-    final availableMeals = meals.where((meal) {
+    final availableMeals = dummyMeals.where((meal) {
       if (_selectedFilters[Filter.glutenFree]! && !meal.isGlutenFree) {
         return false;
       }
@@ -77,13 +87,13 @@ class _TabScreenState extends ConsumerState<TabsScreen> {
     }).toList();
 
     Widget activeScreen = CategoryScreen(
-      availableMeals: availableMeals,
+      onToggleFavourite: _toggleMealFavorite,availableMeals: availableMeals,
     );
     var activeScreenTitle = 'Categories';
     if (_selectedPageIndex == 1) {
-      final favoriteMeals = ref.watch(favoritesMealProvider);
       activeScreen = MealsScreen(
-        meals: favoriteMeals,
+        meals: _favoriteMeals,
+        onToggleFavourite: _toggleMealFavorite,
       );
       activeScreenTitle = 'Your Favorites';
     }
