@@ -1,7 +1,7 @@
 import 'package:first_app/data/dummay_data.dart';
 import 'package:first_app/models/meal.dart';
 import 'package:first_app/screens/categories_v1.dart';
-import 'package:first_app/screens/filter.dart';
+import 'package:first_app/screens/filter_v1.dart';
 import 'package:first_app/screens/meals_v1.dart';
 import 'package:first_app/widgets/main_drawer.dart';
 import 'package:flutter/material.dart';

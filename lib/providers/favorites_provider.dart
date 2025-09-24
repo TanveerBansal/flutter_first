@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/legacy.dart';
 
 // NOTE: in the StateNotifier you are allow to update the value, so you have to reassign it
 class FavoritesMealsNotifier extends StateNotifier<List<Meal>> {
-  FavoritesMealsNotifier() : super([]);
+  FavoritesMealsNotifier() : super([]); //intilize with empty list 
 
   String toggleMealFavoriteStatus(Meal meal) {
     final isAlreadyFav = state.contains(meal);

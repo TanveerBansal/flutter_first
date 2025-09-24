@@ -2,20 +2,14 @@ import 'package:first_app/providers/favorites_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:first_app/providers/meals_provider.dart';
+// import 'package:first_app/providers/meals_provider.dart';
 // import 'package:first_app/data/dummay_data.dart';
 // import 'package:first_app/models/meal.dart';
 import 'package:first_app/screens/categories.dart';
 import 'package:first_app/screens/filter.dart';
 import 'package:first_app/screens/meals.dart';
 import 'package:first_app/widgets/main_drawer.dart';
-
-const initialFilters = {
-  Filter.glutenFree: false,
-  Filter.lactoseFree: false,
-  Filter.vegetarian: false,
-  Filter.vegan: false,
-};
+import 'package:first_app/providers/filters_provider.dart';
 
 // NOTE: While using the riverpod provider in class, we replace the StatefullWidget with ConsumerStatefulWidget and the StatelessWidget with the ConsumerWidget
 class TabsScreen extends ConsumerStatefulWidget {
@@ -31,7 +25,6 @@ class TabsScreen extends ConsumerStatefulWidget {
 class _TabScreenState extends ConsumerState<TabsScreen> {
   int _selectedPageIndex = 0;
 
-  Map<Filter, bool> _selectedFilters = initialFilters;
   void _selectPage(int index) {
     setState(() {
       _selectedPageIndex = index;
@@ -42,39 +35,20 @@ class _TabScreenState extends ConsumerState<TabsScreen> {
     Navigator.of(context).pop();
     if (identifier == 'filters') {
       // final result = await Navigator.pushReplacement(
-      final result = await Navigator.push<Map<Filter, bool>>(
+      await Navigator.push<Map<Filter, bool>>(
         context,
         MaterialPageRoute(
-          builder: (ctx) => FilterScreen(currentFilters: _selectedFilters),
+          builder: (ctx) => const FilterScreen(),
         ),
       );
 
-      setState(() {
-        _selectedFilters = result ?? initialFilters;
-      });
     } else {}
   }
 
   @override
   Widget build(BuildContext context) {
     // NOTE: here ref is provided by the riverpod, and watch() method accepts an argument which you make, and watch is reponsible to re-execute the build method when ever the data is changed;
-    final meals = ref.watch(mealsProvider);
-
-    final availableMeals = meals.where((meal) {
-      if (_selectedFilters[Filter.glutenFree]! && !meal.isGlutenFree) {
-        return false;
-      }
-      if (_selectedFilters[Filter.lactoseFree]! && !meal.isLactoseFree) {
-        return false;
-      }
-      if (_selectedFilters[Filter.vegetarian]! && !meal.isVegetarian) {
-        return false;
-      }
-      if (_selectedFilters[Filter.vegan]! && !meal.isVegan) {
-        return false;
-      }
-      return true;
-    }).toList();
+    final availableMeals = ref.watch(filteredMealsProvider);
 
     Widget activeScreen = CategoryScreen(
       availableMeals: availableMeals,
