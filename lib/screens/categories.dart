@@ -1,3 +1,5 @@
+// In this ANimation implemented
+
 import 'package:first_app/models/category.dart';
 import 'package:first_app/models/meal.dart';
 import 'package:first_app/screens/meals.dart';
@@ -5,15 +7,39 @@ import 'package:first_app/widgets/category_grid_item.dart';
 import 'package:flutter/material.dart';
 import 'package:first_app/data/dummay_data.dart';
 
-class CategoryScreen extends StatelessWidget {
-  const CategoryScreen({
-    super.key,
-    required this.availableMeals,
-  });
+class CategoryScreen extends StatefulWidget {
+  const CategoryScreen({super.key, required this.availableMeals});
   final List<Meal> availableMeals;
 
+  @override
+  State<CategoryScreen> createState() => _CategoryScreenState();
+}
+
+class _CategoryScreenState extends State<CategoryScreen>
+    with SingleTickerProviderStateMixin {
+  // NOTE: here 'late' keyword dart that it will have value before the build executed, as during creation of class its value it null;
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    // NOTE: here we use dispose method to _animationController, because to remove it from the memory as the widget remved, so it don't hold space on memery
+    _animationController.dispose();
+    super.dispose();
+  }
+
   void _selectCategory(BuildContext context, Category category) {
-    final meals = availableMeals
+    final meals = widget.availableMeals
         .where((meal) => meal.categories.contains(category.id))
         .toList();
 
@@ -22,10 +48,7 @@ class CategoryScreen extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (ctx) => MealsScreen(
-          title: category.title,
-          meals: meals,
-        ),
+        builder: (ctx) => MealsScreen(title: category.title, meals: meals),
       ),
     );
     // this can be written another as show below, (both will work same)
@@ -36,24 +59,31 @@ class CategoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return
     // NOTE: GridView.builder allow to make the Grid dynamically (like the ListBuilder), this help in the performance optimization, but here we have some a finite number of categories so here simple GridView is implemented
-    GridView(
-      padding: const EdgeInsets.all(24),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 3 / 2,
-        crossAxisSpacing: 20,
-        mainAxisSpacing: 20,
+    AnimatedBuilder(
+      animation: _animationController,
+      child: GridView(
+        padding: const EdgeInsets.all(24),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 3 / 2,
+          crossAxisSpacing: 20,
+          mainAxisSpacing: 20,
+        ),
+        children: [
+          for (final category in availableCategories)
+            CategoryGridItem(
+              category: category,
+              key: ValueKey(category.id),
+              onSelect: () {
+                _selectCategory(context, category);
+              },
+            ),
+        ],
       ),
-      children: [
-        for (final category in availableCategories)
-          CategoryGridItem(
-            category: category,
-            key: ValueKey(category.id),
-            onSelect: () {
-              _selectCategory(context, category);
-            },
-          ),
-      ],
+      builder: (context, child) => Padding(
+        padding: EdgeInsets.only(top: 100 - _animationController.value * 100),
+        child: child,
+      ),
     );
   }
 }
