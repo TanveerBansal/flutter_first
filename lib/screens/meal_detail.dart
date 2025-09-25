@@ -30,17 +30,32 @@ class MealdetailScreen extends ConsumerWidget {
                   .toggleMealFavoriteStatus(meal);
               _showInfoMessage(wasAdded, context);
             },
-            icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border, color: isFavorite ? Colors.red : const Color.fromARGB(255, 92, 94, 92),),
+            icon: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 500),
+              child: Icon(
+                isFavorite ? Icons.favorite : Icons.favorite_border,
+                color: isFavorite
+                    ? Colors.red
+                    : const Color.fromARGB(255, 92, 94, 92),
+                key: ValueKey(isFavorite),
+              ),
+              transitionBuilder: (child, animation) {
+                return ScaleTransition(scale: animation, child: child);
+              },
+            ),
           ),
         ],
       ),
       body: Column(
         children: [
-          Image.network(
-            meal.imageUrl,
-            width: double.infinity,
-            height: 300,
-            fit: BoxFit.cover,
+          Hero(
+            tag: meal.id,
+            child: Image.network(
+              meal.imageUrl,
+              width: double.infinity,
+              height: 300,
+              fit: BoxFit.cover,
+            ),
           ),
           Expanded(
             child: SingleChildScrollView(
