@@ -1,4 +1,4 @@
-import 'package:first_app/providers/meals_provider.dart';
+import 'package:first_app/_meal_app/providers/meals_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 

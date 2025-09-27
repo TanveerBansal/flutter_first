@@ -1,4 +1,4 @@
-import 'package:first_app/data/dummay_data.dart';
+import 'package:first_app/_meal_app/data/dummay_data.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 

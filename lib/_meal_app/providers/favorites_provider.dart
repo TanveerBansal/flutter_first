@@ -1,4 +1,4 @@
-import 'package:first_app/models/meal.dart';
+import 'package:first_app/_meal_app/models/meal.dart';
 import 'package:flutter_riverpod/legacy.dart';
 
 // NOTE: in the StateNotifier you are allow to update the value, so you have to reassign it

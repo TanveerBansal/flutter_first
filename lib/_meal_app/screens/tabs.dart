@@ -1,15 +1,15 @@
-import 'package:first_app/providers/favorites_provider.dart';
+import 'package:first_app/_meal_app/providers/favorites_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // import 'package:first_app/providers/meals_provider.dart';
 // import 'package:first_app/data/dummay_data.dart';
 // import 'package:first_app/models/meal.dart';
-import 'package:first_app/screens/categories.dart';
-import 'package:first_app/screens/filter.dart';
-import 'package:first_app/screens/meals.dart';
-import 'package:first_app/widgets/main_drawer.dart';
-import 'package:first_app/providers/filters_provider.dart';
+import 'package:first_app/_meal_app/screens/categories.dart';
+import 'package:first_app/_meal_app/screens/filter.dart';
+import 'package:first_app/_meal_app/screens/meals.dart';
+import 'package:first_app/_meal_app/widgets/main_drawer.dart';
+import 'package:first_app/_meal_app/providers/filters_provider.dart';
 
 // NOTE: While using the riverpod provider in class, we replace the StatefullWidget with ConsumerStatefulWidget and the StatelessWidget with the ConsumerWidget
 class TabsScreen extends ConsumerStatefulWidget {

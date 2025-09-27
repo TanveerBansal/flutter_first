@@ -1,5 +1,5 @@
-import 'package:first_app/providers/filters_provider.dart';
-import 'package:first_app/widgets/setting_switch.dart';
+import 'package:first_app/_meal_app/providers/filters_provider.dart';
+import 'package:first_app/_meal_app/widgets/setting_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

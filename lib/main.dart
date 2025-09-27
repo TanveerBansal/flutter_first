@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:first_app/_shopping_list_app/widgets/grocery_list.dart';
 
-import 'package:first_app/screens/tabs.dart';
-// import 'package:first_app/screens/categories.dart';
-
-final theme = ThemeData(
-  colorScheme: ColorScheme.fromSeed(
-    seedColor: const Color.fromARGB(255, 131, 57, 0),
-    brightness: Brightness.dark,
-  ),
-  textTheme: GoogleFonts.latoTextTheme(),
-);
+void main() {
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(theme: theme, home: const TabsScreen());
+    return MaterialApp(
+      title: 'Flutter Groceries',
+      theme: ThemeData.dark().copyWith(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color.fromARGB(255, 147, 229, 250),
+          brightness: Brightness.dark,
+          surface: const Color.fromARGB(255, 42, 51, 59),
+        ),
+        scaffoldBackgroundColor: const Color.fromARGB(255, 50, 58, 60),
+      ),
+      home: const GroceryList(),
+    );
   }
-}
-
-void main() {
-  // NOTE: ProviderScope is root container that keep track of all global state, without it our provide have nowhere to live
-  runApp(const ProviderScope(child: MyApp()));
 }
