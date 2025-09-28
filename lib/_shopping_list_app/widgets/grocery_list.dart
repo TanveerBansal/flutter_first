@@ -1,13 +1,31 @@
 import 'package:first_app/_shopping_list_app/data/dummy_items.dart';
+import 'package:first_app/_shopping_list_app/widgets/new_item.dart';
 import 'package:flutter/material.dart';
 
-class GroceryList extends StatelessWidget {
+class GroceryList extends StatefulWidget {
   const GroceryList({super.key});
+
+  @override
+  State<GroceryList> createState() => _GroceryListState();
+}
+
+class _GroceryListState extends State<GroceryList> {
+  void _addItemNavigate() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (ctx) => const NewItem()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Your Groceries')),
+      appBar: AppBar(
+        title: const Text('Your Groceries'),
+        actions: [
+          IconButton(onPressed: _addItemNavigate, icon: const Icon(Icons.add)),
+        ],
+      ),
       body: ListView.builder(
         itemCount: groceryItems.length,
         itemBuilder: (ctx, index) => ListTile(
