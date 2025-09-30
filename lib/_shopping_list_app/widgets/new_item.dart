@@ -1,4 +1,6 @@
 import 'package:first_app/_shopping_list_app/data/categories.dart';
+import 'package:first_app/_shopping_list_app/models/category.dart';
+import 'package:first_app/_shopping_list_app/models/grocery_item.dart';
 import 'package:flutter/material.dart';
 
 class NewItem extends StatefulWidget {
@@ -10,6 +12,24 @@ class NewItem extends StatefulWidget {
 }
 
 class _NewItemState extends State<NewItem> {
+  final _formKey = GlobalKey<FormState>();
+  var _enteredName = '';
+  var _enteredQuality = 1;
+  var _selectedCategory = categories[Categories.vegetables]!;
+  void _saveItem() {
+     if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      Navigator.of(context).pop(
+        GroceryItem(
+          id: DateTime.now().toString(),
+          name: _enteredName,
+          quantity: _enteredQuality,
+          category: _selectedCategory,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,6 +38,7 @@ class _NewItemState extends State<NewItem> {
         padding: const EdgeInsets.all(12),
         // NOTE: while using the Form widget use TextFormField instead of TextField, as this widget bind to Form widget and provide form's feature
         child: Form(
+          key: _formKey,
           child: Column(
             children: [
               TextFormField(
@@ -25,8 +46,18 @@ class _NewItemState extends State<NewItem> {
                 decoration: const InputDecoration(label: Text('Name')),
                 // autofillHints: ,
                 validator: (value) {
-                  return 'Demo';
+                  if (value == null ||
+                      value.isEmpty ||
+                      value.trim().length <= 1 ||
+                      value.trim().length >= 50) {
+                    return 'Must be between 2 to 50 characters';
+                  }
+                  return null;
                 },
+                onSaved: (value) {
+                  _enteredName = value!;
+                },
+                autofocus: true,
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -37,17 +68,31 @@ class _NewItemState extends State<NewItem> {
                         label: Text('Quantity'),
                       ),
                       initialValue: '1',
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null ||
+                            value.isEmpty ||
+                            int.tryParse(value) == null ||
+                            int.parse(value) <= 0) {
+                          return 'Must be a valid, positive number';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        _enteredQuality = int.parse(value!);
+                      },
                     ),
                   ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: DropdownButtonFormField(
                       // decoration: const InputDecoration(labelText: 'Category'),
+                      value: _selectedCategory,
                       items: categories.entries
                           .map(
                             (category) => DropdownMenuItem(
                               key: ValueKey(category.value.title),
-                              value: category.key,
+                              value: category.value,
                               child: Row(
                                 children: [
                                   Container(
@@ -62,7 +107,11 @@ class _NewItemState extends State<NewItem> {
                             ),
                           )
                           .toList(),
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedCategory = value!;
+                        });
+                      },
                     ),
                   ),
                 ],
@@ -71,9 +120,14 @@ class _NewItemState extends State<NewItem> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextButton(onPressed: () {}, child: const Text('Reset')),
+                  TextButton(
+                    onPressed: () {
+                      _formKey.currentState?.reset();
+                    },
+                    child: const Text('Reset'),
+                  ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: _saveItem,
                     child: const Text('Add Item'),
                   ),
                 ],
