@@ -1,7 +1,10 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:first_app/_shopping_list_app/data/categories.dart';
 import 'package:first_app/_shopping_list_app/models/category.dart';
-import 'package:first_app/_shopping_list_app/models/grocery_item.dart';
-import 'package:flutter/material.dart';
+// import 'package:first_app/_shopping_list_app/models/grocery_item.dart';
 
 class NewItem extends StatefulWidget {
   const NewItem({super.key});
@@ -16,17 +19,40 @@ class _NewItemState extends State<NewItem> {
   var _enteredName = '';
   var _enteredQuality = 1;
   var _selectedCategory = categories[Categories.vegetables]!;
-  void _saveItem() {
-     if (_formKey.currentState!.validate()) {
+  var _isCreating = false;
+
+  void _saveItem() async {
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isCreating = true;
+      });
+
       _formKey.currentState!.save();
-      Navigator.of(context).pop(
-        GroceryItem(
-          id: DateTime.now().toString(),
-          name: _enteredName,
-          quantity: _enteredQuality,
-          category: _selectedCategory,
-        ),
+      final url = Uri.https(
+        'flutter-5d86d-default-rtdb.firebaseio.com',
+        'shopping-list.json',
       );
+      await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'name': _enteredName,
+          'quantity': _enteredQuality,
+          'category': _selectedCategory.title,
+        }),
+      );
+      if (!mounted) return;
+
+      Navigator.of(context).pop();
+
+      // Navigator.of(context).pop(
+      //   GroceryItem(
+      //     id: DateTime.now().toString(),
+      //     name: _enteredName,
+      //     quantity: _enteredQuality,
+      //     category: _selectedCategory,
+      //   ),
+      // );
     }
   }
 
@@ -121,14 +147,16 @@ class _NewItemState extends State<NewItem> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                    onPressed: () {
-                      _formKey.currentState?.reset();
-                    },
+                    onPressed: _isCreating
+                        ? null
+                        : () {
+                            _formKey.currentState?.reset();
+                          },
                     child: const Text('Reset'),
                   ),
                   ElevatedButton(
-                    onPressed: _saveItem,
-                    child: const Text('Add Item'),
+                    onPressed: _isCreating ? null : _saveItem,
+                    child: Text(_isCreating ? 'Adding' : 'Add Item'),
                   ),
                 ],
               ),
