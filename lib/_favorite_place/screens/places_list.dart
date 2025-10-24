@@ -17,11 +17,21 @@ class PlacesListScreen extends ConsumerWidget {
             backgroundColor: Theme.of(context).colorScheme.surface,
           ),
         ),
-        actions: [IconButton(onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> const AddPlaceScreen()));
-        }, icon: const Icon(Icons.add))],
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (ctx) => const AddPlaceScreen()),
+              );
+            },
+            icon: const Icon(Icons.add),
+          ),
+        ],
       ),
-      body:  PlacesListWidget(places: userPlaces),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: PlacesListWidget(places: userPlaces),
+      ),
     );
   }
 }

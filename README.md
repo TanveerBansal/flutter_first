@@ -14,3 +14,6 @@ A few resources to get you started if this is your first Flutter project:
 -----
 ## Riverpod 
 Riverpod is a third party package allows you to define and use shared state across your app (Global state) in a clean, consistent way.
+
+## image_picker
+image_picker is a third party package that allow to use the device native camera feature and also 
