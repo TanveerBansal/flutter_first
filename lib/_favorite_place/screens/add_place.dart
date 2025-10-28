@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:first_app/_favorite_place/models/place.dart';
 import 'package:first_app/_favorite_place/providers/user_places.dart';
 import 'package:first_app/_favorite_place/widgets/image_input.dart';
+import 'package:first_app/_favorite_place/widgets/location_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -26,7 +28,9 @@ class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
     if (enteredPlace.isEmpty || _clickedImage == null) {
       return;
     }
-    ref.read(userPlacesProvider.notifier).addPlace(enteredPlace, _clickedImage!);
+    ref
+        .read(userPlacesProvider.notifier)
+        .addPlace(enteredPlace, _clickedImage!,const PlaceLocationModal(latitude:2.0, longitude:3.1,address:'123, XYZ Streed, London'));
     Navigator.of(context).pop();
   }
 
@@ -50,6 +54,8 @@ class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
               controller: _titleController,
               textCapitalization: TextCapitalization.sentences,
             ),
+            const SizedBox(height: 10),
+            const LocationInput(),
             const SizedBox(height: 10),
             ImageInput(onClickImage: onClickImage),
             const SizedBox(height: 16),
