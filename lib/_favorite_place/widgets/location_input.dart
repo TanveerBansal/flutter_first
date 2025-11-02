@@ -1,5 +1,5 @@
 // import 'dart:convert';
-import 'package:first_app/_favorite_place/models/place.dart';
+// import 'package:first_app/_favorite_place/models/place.dart';
 import 'package:flutter/material.dart';
 // import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
@@ -14,7 +14,7 @@ class LocationInput extends StatefulWidget {
 }
 
 class _LocationInputState extends State<LocationInput> {
-  PlaceLocationModal? _pickedLocation;
+  // PlaceLocationModal? _pickedLocation;
 
 
   void _getCurrentLocation() async {
